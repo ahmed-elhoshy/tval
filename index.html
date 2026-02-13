@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #ff8787);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .container {
+            background: white;
+            padding: 60px 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
+            width: 90%;
+            max-height: 500px;
+        }
+
+        .valentine-text {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: bold;
+            line-height: 1.3;
+        }
+
+        .question-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin-bottom: 30px;
+            object-fit: cover;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-yes {
+            background: linear-gradient(45deg, #ff4757, #ff6b6b);
+            color: white;
+        }
+
+        .btn-yes:hover {
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.3);
+        }
+
+        .btn-no {
+            min-width: 120px;
+            background: linear-gradient(90deg, #ff4757 0%, #ff4757 50%, #747d8c 50%, #57606f 100%);
+            background-size: 200% 100%;
+            background-position: 100% 0;
+            color: white;
+            transition: background-position 0.3s ease;
+        }
+
+        .btn-no:hover {
+            background-position: 0 0;
+            box-shadow: 0 10px 20px rgba(116, 125, 140, 0.3);
+        }
+
+        .result {
+            font-size: 3rem;
+            color: #ff4757;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            text-align: center;
+        }
+
+        .result-image {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            margin-bottom: 20px;
+            object-fit: cover;
+            box-shadow: 0 15px 30px rgba(255, 71, 87, 0.2);
+        }
+
+        .result.show {
+            opacity: 1;
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .celebration {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 20px;
+            color: #ff4757;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-100vh) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="question-section">
+            <img src="assets/b.jpeg" alt="Valentine Question" class="question-image">
+            <h1 class="valentine-text">Would you be my valentine?<br>🐥</h1>
+            <div class="buttons">
+                <button class="btn btn-yes" id="yesBtn">Yes</button>
+                <button class="btn btn-no" id="noBtn">Na2a</button>
+            </div>
+        </div>
+        <div class="result" id="result">
+            <img src="assets/p.jpeg" alt="Valentine Result" class="result-image">
+            <div>MAASY 🐣</div>
+        </div>
+        <div class="celebration" id="celebration"></div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        const questionSection = document.getElementById('question-section');
+        const result = document.getElementById('result');
+
+        // Change "No" button text to "Yes" on hover
+        noBtn.addEventListener('mouseenter', function() {
+            this.textContent = 'Yes';
+        });
+
+        noBtn.addEventListener('mouseleave', function() {
+            this.textContent = 'Na2a';
+        });
+
+        // Handle button clicks
+        yesBtn.addEventListener('click', function() {
+            showResult();
+        });
+
+        noBtn.addEventListener('click', function() {
+            showResult();
+        });
+
+        function showResult() {
+            questionSection.classList.add('hidden');
+            result.classList.add('show');
+            startCelebration();
+        }
+
+        function startCelebration() {
+            const celebration = document.getElementById('celebration');
+            celebration.innerHTML = '';
+            
+            // Create falling hearts
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    createHeart(celebration);
+                }, i * 200);
+            }
+        }
+
+        function createHeart(container) {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            heart.style.left = Math.random() * 100 + '%';
+            heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            heart.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            container.appendChild(heart);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
